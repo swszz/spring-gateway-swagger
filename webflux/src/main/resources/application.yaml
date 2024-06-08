@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: netty-based
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8082

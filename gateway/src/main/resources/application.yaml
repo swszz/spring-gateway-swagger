@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allow-credentials: true
+            allowedHeaders:
+              - "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+              - HEAD
+            allowedOriginPatterns:
+              - "*"
+            exposedHeaders:
+              - "Content-Disposition"
+      routes:
+        - id: tomcat-based-swagger
+          uri: http://localhost:8081
+          predicates:
+            - Path=/swagger/tomcat-based/v3/api-docs/**
+            - Method=GET
+          filters:
+            - RewritePath=/swagger/tomcat-based/(?<path>.*), /$\{path}
+        - id: tomcat-based-api
+          uri: http://localhost:8081
+          predicates:
+            - Path=/tomcat/**
+            - Method=GET,POST,PUT,DELETE
+
+        - id: netty-based-swagger
+          uri: http://localhost:8082
+          predicates:
+            - Path=/swagger/netty-based/v3/api-docs/**
+            - Method=GET
+          filters:
+            - RewritePath=/swagger/netty-based/(?<path>.*), /$\{path}
+        - id: netty-based-api
+          uri: http://localhost:8082
+          predicates:
+            - Path=/netty/**
+            - Method=GET,POST,PUT,DELETE
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    use-root-path: true
+    urls:
+      - url: /swagger/tomcat-based/v3/api-docs
+        name: Tomcat Based
+      - url: /swagger/netty-based/v3/api-docs
+        name: Netty Based
