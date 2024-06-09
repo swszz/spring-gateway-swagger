@@ -1,6 +1,6 @@
 gateway:
-  tomcat:
-    routes:
+  routes:
+    tomcat:
       - id: tomcat-based-swagger
         uri: http://localhost:8081
         predicates:

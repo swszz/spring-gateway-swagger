@@ -1,6 +1,6 @@
 gateway:
-  netty:
-    routes:
+  routes:
+    netty:
       - id: netty-based-swagger
         uri: http://localhost:8082
         predicates:

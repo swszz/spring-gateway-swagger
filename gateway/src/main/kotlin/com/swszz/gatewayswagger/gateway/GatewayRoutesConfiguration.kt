@@ -6,33 +6,20 @@ import org.springframework.cloud.gateway.config.PropertiesRouteDefinitionLocator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-
 @Configuration
 @EnableConfigurationProperties(
-    value = [GatewayTomcatRoutesProperties::class,
-        GatewayNettyRoutesProperties::class]
+    value = [GatewayRoutesProperties::class]
 )
 class GatewayRoutesConfiguration {
     @Bean
     fun propertiesRouteDefinitionLocator(
         properties: GatewayProperties,
-        gatewayTomcatRoutesProperties: GatewayTomcatRoutesProperties,
-        gatewayNettyRoutesProperties: GatewayNettyRoutesProperties,
+        gatewayRoutesProperties: GatewayRoutesProperties,
     ): PropertiesRouteDefinitionLocator {
-
-        configureRoutesDefinition(
-            gatewayProperties = properties,
-            gatewayNettyRoutesProperties,
-            gatewayTomcatRoutesProperties
-        )
-
+        properties.apply {
+            routes = gatewayRoutesProperties.routes.flatMap { it.value }
+        }
         return PropertiesRouteDefinitionLocator(properties)
     }
 
-    private fun configureRoutesDefinition(
-        gatewayProperties: GatewayProperties,
-        vararg routesProperties: RoutesProperties,
-    ) {
-        gatewayProperties.routes = routesProperties.flatMap { it.routes.values }
-    }
 }
