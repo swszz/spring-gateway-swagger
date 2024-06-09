@@ -1,4 +1,8 @@
 spring:
+  config:
+    import:
+      - classpath:netty-based.yaml
+      - classpath:tomcat-based.yaml
   application:
     name: gateway
   cloud:
@@ -21,32 +25,6 @@ spring:
               - "*"
             exposedHeaders:
               - "Content-Disposition"
-      routes:
-        - id: tomcat-based-swagger
-          uri: http://localhost:8081
-          predicates:
-            - Path=/swagger/tomcat-based/v3/api-docs/**
-            - Method=GET
-          filters:
-            - RewritePath=/swagger/tomcat-based/(?<path>.*), /$\{path}
-        - id: tomcat-based-api
-          uri: http://localhost:8081
-          predicates:
-            - Path=/tomcat/**
-            - Method=GET,POST,PUT,DELETE
-
-        - id: netty-based-swagger
-          uri: http://localhost:8082
-          predicates:
-            - Path=/swagger/netty-based/v3/api-docs/**
-            - Method=GET
-          filters:
-            - RewritePath=/swagger/netty-based/(?<path>.*), /$\{path}
-        - id: netty-based-api
-          uri: http://localhost:8082
-          predicates:
-            - Path=/netty/**
-            - Method=GET,POST,PUT,DELETE
 
 springdoc:
   api-docs:

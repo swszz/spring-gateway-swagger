@@ -1,0 +1,15 @@
+gateway:
+  netty:
+    routes:
+      - id: netty-based-swagger
+        uri: http://localhost:8082
+        predicates:
+          - Path=/swagger/netty-based/v3/api-docs/**
+          - Method=GET
+        filters:
+          - RewritePath=/swagger/netty-based/(?<path>.*), /$\{path}
+      - id: netty-based-api
+        uri: http://localhost:8082
+        predicates:
+          - Path=/netty/**
+          - Method=GET,POST,PUT,DELETE
